@@ -1,0 +1,73 @@
+Hướng dẫn sử dụng Logback
+    1, Cài đặt
+    2, Cấu hình
+    File cấu hình logback là một file xml
+    Cấu hình 3 loại appender: Console, ghi file ERROR,file INFO
+        <root level="info">
+            appender-ref ref="STDOUT" />
+            <appender-ref ref="ERROR"/>
+            <appender-ref ref="INFO"/>
+        </root>
+    Console:Appender để ghi ra console, sử dụng ConsoleAppender
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+                by default -->
+            <encoder>
+                <charset>UTF-8</charset>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+    ERROR:Để ghi file error,
+        <appender name="ERROR"
+            class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <append>true</append>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>ERROR</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <charset>UTF-8</charset>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- rollover daily -->
+                <fileNamePattern>${DEV_HOME}/%d{yyyy-MM,aux}/error/ERROR.%d.%i.log
+                </fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>10MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+            </rollingPolicy>
+        </appender>
+    INFO: Để ghi file level info
+        <appender name="INFO"
+                class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <append>true</append>
+                <encoder>
+                    <charset>UTF-8</charset>
+                    <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                </encoder>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <!-- rollover daily -->
+                    <fileNamePattern>${DEV_HOME}/%d{yyyy-MM,aux}/INFO/INFO.%d.%i.log
+                    </fileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy
+                        class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                        <maxFileSize>10MB</maxFileSize>
+                    </timeBasedFileNamingAndTriggeringPolicy>
+                </rollingPolicy>
+        </appender>
+    Tạo logger riếng: Ở VD trên là các logger level root, logger có tên là jms, level DEBUG, additivity="true" để append cả vào root loggger.Sử dụng bằng cách Logger LOGGER = LoggerFactory.getLogger("jms");Ghi file rolling tương tự trên.
+        <logger name="jms" level="DEBUG" additivity="true">
+            <appender-ref ref="JMS-FILE" />
+        </logger>
+     3, Ghi chú
+        a, Pattern hiển thị message:<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            Hiển thị message theo ngày, tháng, năm, thread, level, tên log, message
+        b, Pattern ghi file theo ngày:<fileNamePattern>${DEV_HOME}/%d{yyyy-MM,aux}/error/ERROR.%d.%i.log</fileNamePattern>
+            Hiển thị file theo thư mục DEVHOME/năm-tháng/error/ngàyGhi file.
+            Lưu ý: Sử dụng d{yyyy-MM,aux} khi dùng 2 lần pattern date
+    
+        
