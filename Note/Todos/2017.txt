@@ -1,0 +1,7 @@
+- Basic Java Web
+- Linux - Depops
+- Front-end
+- Design API: Swagger
+Tools:
+Jenkin
+Docker

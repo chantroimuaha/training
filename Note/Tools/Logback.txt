@@ -1,6 +1,11 @@
-Hướng dẫn sử dụng Logback
-    1, Cài đặt
-    2, Cấu hình
+BASIC QUESTION:
+    WHAT: Logback là một thư viện dùng để log trong hệ thống 
+    WHEN: Khi cần ghi log hệ thống, thông thường hệ thống web sẽ ghi log khi gặp lỗi dễ ràng bảo trì.
+    WHY:Logback là một thư viện log khá dễ dùng và được dùng phổ biển, ngoài
+CONFIGURATION:
+    Cấu hình càn có file thử viện + file configure(logback.xml)
+USAGE:
+    BASIC:
     File cấu hình logback là một file xml
     Cấu hình 3 loại appender: Console, ghi file ERROR,file INFO
         <root level="info">
@@ -71,3 +76,5 @@ Hướng dẫn sử dụng Logback
             Lưu ý: Sử dụng d{yyyy-MM,aux} khi dùng 2 lần pattern date
     
         
+    ADVANTAGE
+    
