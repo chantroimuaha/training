@@ -1,0 +1,14 @@
+BASIC QUESTION:
+    WHAT: 
+    WHEN:
+    WHY:
+CONFIGURATION:
+    
+USAGE:
+    BASIC:
+        ${enclosing_type}.class: Main class
+        ${:import(org.springframework.boot.SpringApplication)}: import
+        ${log:field(org.slf4j.Logger)}.info("${message}"): log info
+    ADVANTAGE
+NOTE: 
+Các từ gợi ý hay dùng: main, logger, jumockmvcwac, RequestMapping,logi,loge,logd,runnable
