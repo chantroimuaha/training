@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+    <script type="text/javascript" th:src="@{/js/ADM002.js}" ></script>
+    <body class="main">
+        <form th:action="@{/listUsers}" method="post" name="listUsersForm" id="listUser" >
+        <div>
+        	<p style="font-size:20px" th:text="#{LIST_INSURANCE}"></p>
+        	<div class="company">
+        		<b th:text="#{COMPANY_NAME}"></b>
+        		<br></br>
+        		<div th:if="${#lists.isEmpty(listCompany)}">
+	        		<p style="color:red" th:text="#{NO_COMPANY_CHOSE}"></p>
+        		</div>
+        		<b th:if="${#lists.size(listCompany) gt 0}">
+        			<select name="companyId" id="companyId">
+							<option th:each="company : ${listCompany}" th:value="${company.id}" th:text="${company.name}" th:selected="(${company.id} == ${companyId})"></option>
+					</select>
+        		</b>
+        	</div>
+        	<p></p>
+        </div>
+        <input type="hidden" name="tabID" th:value="${tabID}"></input>
+        <input type="hidden" name="companyIdHidden" th:value="${companyId}"></input>
+        <b style="font-weight: bold" th:text="#{INFORMATION_SEARCH}"></b>
+        <div style="border: 1px solid black;width:450px;height:185px">
+        	<p></p>
+			<table style="margin-left:3%;width:416px;height:120px" >
+				<tr>
+					<td class="lbl_left" th:text="#{NAME_USER_TITLE}"></td>
+					<td align="left">
+						<input class="txBox" type="text" name="fullNameKey" th:value="${fullNameKey}"
+							size="20" onfocus="this.style.borderColor='#0066ff';"
+							onblur="this.style.borderColor='#aaaaaa';" ></input>
+					</td>
+				</tr>
+				<tr>
+					<td class="lbl_left" th:text="#{INSURANCE_CODE}"></td>
+					<td align="left">
+						<input class="txBox" type="text" name="insuranceCodeKey" th:value="${insuranceCodeKey}"
+							size="20" onfocus="this.style.borderColor='#0066ff';"
+							onblur="this.style.borderColor='#aaaaaa';" />
+					</td>
+				</tr>
+				<tr>
+					<td class="lbl_left" th:text="#{INSURANCE_PLACE_REGISTER}"></td>
+					<td align="left">
+						<input class="txBox" type="text" name="insurancePlaceRegisterKey" th:value="${insurancePlaceRegisterKey}"
+							size="20" onfocus="this.style.borderColor='#0066ff';"
+							onblur="this.style.borderColor='#aaaaaa';" ></input>
+					</td>
+				</tr>
+			</table>
+        <div style="margin-left:23%">
+			<p align="left">
+				<input class="btn" type="submit" th:value="#{SEARCH}" ></input>
+			</p>
+		</div>
+        </div>
+		<div>
+			<p>
+				<b ><input id="addUser" type="button" th:value="#{REGISTER}" ></input></b>
+				<b style="margin-left:25%"><input th:unless="${#lists.isEmpty(listUser)}" id="exportCSV" type="button" th:value="#{EXPORT_CSV}" ></input></b>
+			</p>
+		</div>
+		<div>
+			<p th:if="${#lists.isEmpty(listUser)}" style="color:red" th:text="#{NO_INSURANCE}"></p>
+			<table th:unless="${#lists.isEmpty(listUser)}" class="listUser">
+				<tr>
+					<th th:if="${sort == 'DESC'}">
+						<a th:text="#{NAME_USER_TITLE}+'▼'"></a>
+						<a th:href="@{/listUsers(sort=ASC,tabID=${tabID})}">▲</a>
+					</th>
+					<th th:if="${sort == 'ASC'}">
+						<a th:text="#{NAME_USER_TITLE}+'▲'"></a>
+						<a th:href="@{/listUsers(sort=DESC,tabID=${tabID})}">▼</a>
+					</th>
+					<th th:text="#{SEX_USER_TITLE}"></th>
+					<th th:text="#{BIRTHDAY_USER}"></th>
+					<th th:text="#{INSURANCE_CODE}"></th>
+					<th th:text="#{INSURANCE_TERM}"></th>
+					<th align="left" th:text="#{INSURANCE_PLACE_REGISTER}"></th>
+				</tr>
+				<tr th:each="user : ${listUser}">
+					<td align="left"><a th:text="${user.fullName}" th:href="@{/viewDetailUser(userId=${user.id},tabID=${tabID})}"></a></td>
+					<td align="center" th:text="${user.sex} == '1' ? #{SEX_USER_MALE}: #{SEX_USER_FEMALE}"></td>
+					<td align="center" th:text="${user.birthday != null} ? ${#dates.format(user.birthday, 'dd/MM/yyyy')} : ''"></td>
+					<td align="center" th:text="${user.insurance.code}"></td>
+					<td align="center" th:text="${#dates.format(user.insurance.startDate, 'dd/MM/yyyy')} + ' ~ ' + ${#dates.format(user.insurance.endDate, 'dd/MM/yyyy')}"></td>
+					<td align="left" th:text="${user.insurance.placeRegister}"></td>
+				</tr>
+				<tr th:each="i : ${listEmpty}">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</table>
+			<table class="tblPaging" th:unless="${#lists.isEmpty(listUser)}">
+				<tr>
+					<td th:if="${page gt 1}"><a th:href ="@{/listUsers(page=${page-1},tabID=${tabID})}">&laquo; | </a> </td>
+					<td style="color:blue" th:each="i:${listPage}" th:if="${totalPage gt 1}">
+						<a th:if="${page ne i}" 
+						   th:text="${i eq listPage[0]} ? ${i} : ' | ' + ${i}" th:href="@{/listUsers(page=${i},tabID=${tabID})}"></a>
+						<a th:if="${page eq i}" 
+						   th:text="${i eq listPage[0]} ? ${i} : ' | ' + ${i}" style="color:black;font-weight: bold"></a>
+					</td>
+					<td th:if="${page lt totalPage}"><a th:href ="@{/listUsers(page=${page+1},tabID=${tabID})}"> | &raquo;</a> </td>
+				</tr>
+			</table>
+			</div>
+        </form>
+    </body>
+    <div th:replace="fragments/footer :: footer">&nbsp;</div>
+</html>

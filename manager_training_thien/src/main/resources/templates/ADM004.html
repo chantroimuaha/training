@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+    <script type="text/javascript" th:src="@{/js/ADM004.js}" ></script>
+    <p th:text="(${user.id} == 0 )? #{ADD_INFORMATION_INSURANCE} : #{UPDATE_INFORMATION_INSURANCE}" style="font-size:20px"></p>
+    <p style="color:red" th:each="error:${errors}" th:text="${error}"></p>
+    <body style="margin-left:10%">
+    	<form name="addUserInputValidate" th:action="@{/saveUser}" method="post">
+    		<input type="hidden" th:value="${user.id}" name="id"></input>
+    		<input type="hidden" th:value="${tabID}" name="tabID"></input>
+    		<input type="hidden" th:value="${defaultCompanyId}" id="defaultCompanyId"></input>
+	        <table class="tblAddUser" >
+	        	<tr>
+	       			<td th:text="#{INSURANCE_CODE}" style="width: 30%;"></td>
+	       			<td >
+	       				<input type="text" name="insuranceCode" th:value="${user.insuranceCode}"></input>
+	       				<input type="hidden" name="insuranceId" th:value="${user.insuranceId}"></input>
+	       			</td>
+	        	</tr>
+	        	<tr>
+	       			<td th:text="#{FULL_NAME}"></td>
+	       			<td ><input type="text" name="fullName" th:value="${user.fullName}"></input></td>
+	        	</tr>
+	        	<tr>
+	       			<td th:text="#{SEX_USER_TITLE}"></td>
+	       			<td>
+	       				<select name="sex">
+	       					<option value="1" th:selected="${user.sex} == '1'" th:text="#{SEX_USER_MALE}"></option>
+	       					<option value="2" th:selected="${user.sex} == '2'" th:text="#{SEX_USER_FEMALE}"></option>
+	       				</select>
+	       			</td>
+	        	</tr>
+	        	<tr>
+	       			<td th:text="#{BIRTHDAY_USER}"></td>
+	       			<td >
+	       				<input type="text" id="birthday" name="birthday" th:value="${user.birthday}"  size="18"></input>
+	       			</td>
+	        	</tr>
+	        	<tr>
+	        		<td th:text="#{COMPANY}" style="float: left;margin-top: 40px;"></td>
+	       			<td>
+	       				<table >
+	       					<tr th:if="${#lists.size(listCompany) gt 0}">
+	       						<td>
+	       						<input type="radio" name="isChoseOld" th:checked="${user.isChoseOld} == 'true'" value="true" ></input>
+	       						<span th:text="#{OLD_COMPANY}"></span>
+	       						</td>
+	       					</tr>
+	       					<tr>
+	       						<td>
+	       							<table th:style="${user.isChoseOld} == 'true' ? 'display:block':'display:none'" id="oldCompany" >
+	       								<tr>
+				       						<td>
+				       							<select name="companyId" id="companySelect">
+													<option th:each="company : ${listCompany}" 
+													th:value="${company.id}" 
+													th:text="${company.name}" 
+													th:selected="(${company.id} == ${defaultCompanyId})"></option>
+												</select>
+				       						</td>
+				       					</tr>
+	       							</table>
+	       						</td>
+	       					</tr>
+	   						<tr>
+	   							<td ><input type="radio" name="isChoseOld" value="false" th:checked="${user.isChoseOld} == 'false'"></input>
+	   								<span th:text="#{NEW_REGISTER_COMPANY}"></span>
+	   							</td>
+	       					</tr>
+	       					<tr>
+	       						<td>
+	       							<table th:style="${user.isChoseOld} == 'true' ? 'display:none':'display:block'" id="newCompany">
+	       								<tr>
+	       									<td th:text="#{COMPANY_NAME}"></td>
+	       									<td>
+	       										<input type="text" name="companyName" th:value="${user.companyName}"></input>
+	       									</td>
+	       								</tr>
+	       								<tr>
+	       									<td th:text="#{ADDRESS}"></td>
+	       									<td>
+	       										<input type="text" name="companyAddress" th:value="${user.companyAddress}"></input>
+	       									</td>
+	       								</tr>
+	       								<tr>
+	       									<td th:text="#{EMAIL}"></td>
+	       									<td>
+	       										<input type="text" name="companyEmail" th:value="${user.companyEmail}"></input>
+	       									</td>
+	       								</tr>
+	       								<tr>
+	       									<td th:text="#{PHONE}"></td>
+	       									<td>
+	       										<input type="text" name="companyTel" th:value="${user.companyTel}"></input>
+	       									</td>
+	       								</tr>
+	       							</table>
+	       						</td>
+	       					</tr>
+	       				</table>
+	       			</td>
+	        	</tr>
+	        	<tr>
+	       			<td th:text="#{INSURANCE_PLACE_REGISTER}"></td>
+	       			<td>
+	       				<input type="text" name="placeRegister" th:value="${user.placeRegister}"></input>
+	       			</td>
+	        	</tr>
+	        	<tr>
+	       			<td th:text="#{INSURANCE_START_DATE}"></td>
+	       			<td>
+	       				<input type="text" id="startDate" name="startDate" th:value="${user.startDate}" size="18"></input>
+	       			</td>
+	        	</tr>
+	        	<tr>
+	       			<td th:text="#{INSURANCE_END_DATE}"></td>
+	       			<td>
+	       				<input type="text" id="endDate" name="endDate" th:value="${user.endDate}" size="18"></input>
+	       			</td>
+	        	</tr>
+	        </table>
+	        <div>
+       			<b><input id="back" type="button" th:value="#{CANCEL}" style="margin-left:45px"></input></b>
+       			<b>
+       				<input  type="submit" th:value="(${user.id} gt 0) ? #{UPDATE} : #{REGISTER}" style="margin-left:20px"></input>
+       			</b>
+	        </div>
+	    </form>
+    </body>
+    <div th:replace="fragments/footer :: footer">&nbsp;</div>
+</html>

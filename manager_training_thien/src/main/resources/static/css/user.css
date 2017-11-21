@@ -1,0 +1,71 @@
+/* table {
+    border-collapse: collapse;
+    border: 1px solid black;
+} */
+.main{
+	margin-left:220px;
+}
+.tbl {
+	 width:25%;
+	 height:530px;
+}
+.tblAddUser {
+	width:600px;
+	height:500px;
+}
+.company{
+	font-weight: bold;
+	margin-left:50px;
+}
+.lbl_footer {
+	font-size: 15px;
+	font-weight: bold;
+	color: #000000;
+	text-align: center;
+	width: 850px;
+}
+.dda {
+	font-size: 15px;
+	border: 1px solid black;
+	background-image: none;
+}
+.viewTable {
+	border: 1px solid black;
+	 border-collapse: collapse;
+}
+.listUser{
+	font-size: 15px;
+	background-image: none;
+	border-collapse: collapse;
+}
+.listUser td{
+	border: 1px solid black;
+	height:25px;
+}
+.listUser th{
+	border: 1px solid black;
+	height:30px;
+}
+.tblLoginRegister{
+	margin-left:7%;
+	width:400px;
+	height:90px;
+}
+.tblPaging{
+	margin-left:30px;
+}
+.viewDetail {
+	border-collapse: collapse;
+	border: 1px solid black;
+	text-align: left;
+	height: 240px;
+	width: 420px;
+}
+.viewDetail th{
+	border: 1px solid black;
+	//height:25px;
+}
+.viewDetail td{
+	border: 1px solid black;
+	//height:20px;
+}

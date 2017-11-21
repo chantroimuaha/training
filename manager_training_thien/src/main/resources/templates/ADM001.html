@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <body class="main">
+   		 <input type="hidden" th:value="#{USER_NAME_EMPTY}" id="userNameEmpty"></input>
+         <input type="hidden" th:value="#{PASSWORD_EMPTY}" id="passwordEmpty"></input>
+         <div th:replace="fragments/header :: header">&nbsp;</div>
+        <div th:if="${param.error}" name="error" style="color:red;margin-left:13%;font-size: 20px;"
+        th:text="#{WRONG_LOGIN}">
+        </div >
+        <div name="error" th:if="${param.error} == null" style="color:red;margin-left:13%;font-size: 20px;"></div>
+     
+        <div style="margin-left:13%;font-size: 20px;">
+        	<p th:text="#{LOGIN_SYSTEM}"></p>
+        </div>
+        <form th:action="@{/login}" method="post" id="loginForm" novalidate="novalidate">
+            <table class="tblLoginRegister">
+            	<tr>
+            		<td th:text="#{USER_NAME}"></td>
+            		<td><input type="text" name="username" id="username"/></td>
+            	</tr>
+            	<tr>
+            		<td th:text="#{PASSWORD}"></td>
+            		<td><input type="password" name="password" id="password"></input></td>
+            	</tr>
+            </table>
+        </form>
+	    <br></br>
+	    <div style="margin-left:14%"><input type="button" id="login" th:value="#{LOGIN}"/></div>
+        <div th:replace="fragments/footer :: footer">&nbsp;</div>
+    </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" th:fragment="header">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.js"></script>
+    <script type="text/javascript" th:src="@{/js/user.js}" ></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+  	<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/user.css}"/>
+  	<link rel="stylesheet" type="text/css" media="all" th:href="@{//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css}"/>
+</head>
+<body>
+
+<!-- 
+<div class="navbar navbar-inverse navbar-fixed-top" >
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a  th:href="@{/signin}">Sign in</a></li>
+                <li ><a th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+        /.nav-collapse
+    </div>
+</div> -->
+<!-- Begin vung header -->
+		<div>
+			<p><img src="./images/logo-manager-user.gif" alt="Luvina" /></p>
+			<p style="margin-left:35%">
+				<span th:if="${#httpServletRequest.remoteUser} != null"><a th:href="@{/logout}">Logout</a></span>
+				<!-- <b><a th:href="@{/listUsers}">Home</a></b> -->
+			</p>	
+				<!-- <div>
+			<table>
+			<tr>
+				<td width ="88%"><img src="./images/logo-manager-user.gif" alt="Luvina" /></td>
+				<td align="left"><a th:href="@{/logout}">Logout</a> &nbsp; <a th:href="@{/listUsers}">Home</a></td>
+				<td th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</td>
+			</tr>
+			</table>
+			</div> -->
+		</div>
+
+<!-- End vung header -->
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <body style="margin-left:10%">
+	    <div th:replace="fragments/header :: header">&nbsp;</div>
+	    <script type="text/javascript" th:src="@{/js/ADM003.js}" ></script>
+	    <header th:text="#{DETAIL_INSURANCE}" style="font-size: 20px"></header>
+    	<input type="hidden" id="id" th:value="${user.id}"></input>
+    	<input type="hidden" name="tabID" th:value="${tabID}"></input>
+    	<p>
+	    	<input id="back" type="button" th:value="#{BACK}"></input>
+    	</p>
+        <table class="viewDetail">
+        	<tr>
+       			<th th:text="#{INSURANCE_CODE}"></th><td th:text="${user.insurance.code}"></td>
+        	</tr>
+        	<tr>
+       			<th th:text="#{FULL_NAME}"></th>
+       			<td th:text="${user.fullName}">
+       			</td>
+        	</tr>
+        	<tr>
+       			<th th:text="#{SEX_USER_TITLE}"></th>
+       			<td th:text="${user.sex} == '1' ? #{SEX_USER_MALE}: #{SEX_USER_FEMALE}"></td>
+        	</tr>
+        	<tr>
+       			<th th:text="#{BIRTHDAY_USER}"></th><td th:text="${user.birthday != null} ? ${#dates.format(user.birthday, 'dd/MM/yyyy')} : ''"></td>
+        	</tr>
+        	<tr>
+       			<th th:text="#{COMPANY_NAME}"></th><td th:text="${user.company.name}"></td>
+        	</tr>
+        	<tr>
+       			<th th:text="#{INSURANCE_PLACE_REGISTER}"></th><td th:text="${user.insurance.placeRegister}"></td>
+        	</tr>
+        	<tr>
+       			<th th:text="#{INSURANCE_TERM}"></th><td th:text="${#dates.format(user.insurance.startDate, 'dd/MM/yyyy')} + ' ' + #{TO} + ' ' + ${#dates.format(user.insurance.endDate, 'dd/MM/yyyy')}"></td>
+
+        	</tr>
+        </table>
+        <div>
+	        <p>
+	        	<b style="margin-left:40px"><input type="button" id="deleteUser" th:value="#{DELETE}"></input></b>
+	        	<b style="margin-left:20px"><input type="button" th:value="#{UPDATE}" id="update"></input></b>
+	        </p>
+        </div>
+	    <div th:replace="fragments/footer :: footer">&nbsp;</div>
+    </body>
+</html>
