@@ -7,3 +7,5 @@ CONFIGURATION:
 USAGE:
     BASIC:
     ADVANTAGE
+        Delete branch local:git branch -d {the_local_branch} (use -D instead to force deletion without checking merged status)
+        Delete branch remote: git push origin --delete {the_remote_branch}
