@@ -1,0 +1,123 @@
+BASIC QUESTION:
+    WHAT: Ibatis là một ORM lâu đời
+    WHEN: Dùng để tách phần SQL và phần java code ra riêng
+    WHY: Ibatis được sử dụng ở hệ thống cũ.
+CONFIGURATION:
+    2 phần là file thư viện +  SQLMapConfig.xml + SQLMap.xml
+USAGE:
+    BASIC:
+        File cấu hình có định dạng sau:
+        <sqlMapConfig>
+          <transactionManager type="JDBC" commitRequired="false">
+            <dataSource type="EMPLOYEE">
+             <property name="JDBC.Driver"           value="com.mysql.jdbc.Driver"/>
+              <property name="JDBC.ConnectionURL" value="jdbc:mysql://localhost:3306/ibatis"/>
+              <property name="JDBC.Username" value="root"/>
+              <property name="JDBC.Password" value=""/>
+            </dataSource>
+          </transactionManager>
+         <!-- List the SQL Map XML files. They can be loaded from the classpath, as they are here (com.mydomain.data...) -->
+          <sqlMap resource="com/mydomain/data/Employee.xml"/>
+         </sqlMapConfig>
+         Dùng để kết nối SQL, reference tới sqlMap
+         File mapping:
+         <sqlMap namespace="Employee">
+              <typeAlias alias="Employee" type="com.sample.Employee"/>
+              <resultMap id="EmpResult" class="Employee">
+                <result property="id" column="emp_id"/>
+                <result property="firstName" column="emp_firstname"/>
+                <result property="lastName" column="emp_lastname"/>
+               </resultMap>
+              <!-- Select all data from the table using the result map for Employee class.-->
+              <select id="selectAllEmps" resultMap="EmpResult">
+                select * from EMPLOYEE
+              </select>
+            <!-- Select the data from the table based on the id. -->
+            <select id="selectEmpById" parameterClass="int" resultClass="Employee">
+             <select emp_id as id,emp_firstname as firstName,     emp_lastname as lastName from EMPLOYEE where emp_id= #id#
+            </select>
+            <!--  insert the data into the table -->
+            <insert id="insertEmp" parameterClass="Employee">
+                insert into EMPLOYEE (
+                  emp_id,
+                   emp_firstname,
+                   emp_lastname)
+                values (
+                  #id#, #firstName# , #lastName# )
+              </insert>
+            <!-- update the Employee record based on the id -->
+              <update id="updateEmp" parameterClass="Employee">
+                update EMPLOYEE set
+                  emp_firstname = #firstName#,
+                  emp_lastname = #lastName#
+                where
+                  emp_id = #id#
+              </update>
+            <!-- delete the Employee record based on the given id -->
+                <delete id="deleteEmp" parameterClass="int">
+                delete from EMPLOYEE where emp_id = #id#
+              </delete>
+            </sqlMap>
+        Có các loại mapping: select,insert,update,delete
+        Có các attribute: 
+            id: tên dùng để sử dụng, 
+            resultClass: Class mà kết quả trả về.
+            parameterClass: Class của tham số,
+            resultMap: Để định nghĩa  riêng mapping giữa Model và table
+    ADVANTAGE
+    IBATIS trong spring:
+        Có 1 file mapping: Account.xml,
+        <sqlMap namespace="Account">
+          <resultMap id="result" class="examples.Account">
+            <result property="name" column="NAME" columnIndex="1"/>
+            <result property="email" column="EMAIL" columnIndex="2"/>
+          </resultMap>
+
+          <select id="getAccountByEmail" resultMap="result">
+            select ACCOUNT.NAME, ACCOUNT.EMAIL
+            from ACCOUNT
+            where ACCOUNT.EMAIL = #value#
+          </select>
+          <insert id="insertAccount">
+            insert into ACCOUNT (NAME, EMAIL) values (#name#, #email#)
+          </insert>
+        </sqlMap>
+        File cấu hình sau:
+        <sqlMapConfig>
+          <sqlMap resource="example/Account.xml"/>
+        </sqlMapConfig>
+        IBATIS lấy resource từ classpath
+        Cấu hình bean dùng cho IBATIS:
+            Sử dụng SqlMapClientFactoryBean
+            <beans>
+              <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+                <property name="driverClassName" value="${jdbc.driverClassName}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+              </bean>
+
+              <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+                <property name="configLocation" value="WEB-INF/sqlmap-config.xml"/>
+                <property name="dataSource" ref="dataSource"/>
+              </bean>
+            </beans>
+            Sử dụng SqlMapClientTemplate và SqlMapClientSuport:
+            public class SqlMapAccountDao extends SqlMapClientDaoSupport implements AccountDao {
+
+                public Account getAccount(String email) throws DataAccessException {
+                    return (Account) getSqlMapClientTemplate().queryForObject("getAccountByEmail", email);
+                }
+
+                public void insertAccount(Account account) throws DataAccessException {
+                    getSqlMapClientTemplate().update("insertAccount", account);
+                }
+            }
+            Configure:
+            <beans>
+              <bean id="accountDao" class="example.SqlMapAccountDao">
+                <property name="sqlMapClient" ref="sqlMapClient"/>
+              </bean>
+
+            </beans>
+NOTE:
