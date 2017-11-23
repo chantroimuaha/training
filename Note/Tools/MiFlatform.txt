@@ -1,0 +1,73 @@
+BASIC QUESTION:
+    WHAT:is a multi-tier based UI integration flatform and development tool. I applies the X-Internet concept to the wired/wireless environment to delivery a full user interface and easy development environment on the presentation layer.
+    MiFlatform có các module sau:
+        Operating Program:
+            MiFlatform Brower: 
+                Lấy data sử dụng service bằng BSB và tạo ra file phát triển sử dụng PID tới MH với user interface.
+            MiFlatform Simulator: 
+                Là một brower, mà thêm log vào chức năng cho MiFlatform Brower. Sử dụng MiFlatform Brower, MH user được phát triển với PID để xem preview.
+            MiUpdater: 
+                Là một chương trình để phân tán components tới người dùng từ server.
+            Components: Một module chức năng mà tạo UI của MiFlatform Brower. MiFlatform Brower hình thành và hiển thị cho người dùng với Components
+        Development Tool: 
+            PID: 
+                Là một tool để phát triển PI(Presentation Interface). PI lưu user screen trong form of Form Script file, StartXML file,Domain file, Image Resource file.
+            BSB: 
+                Là một tool để phát triển BS(Business Service). BS là một service mà xử lý data input với PI, và lưu trữ một trong các file: ASP,JSP,JavaScript, C++.
+        Development file:
+            PI: 
+                Là một user sceen data và lưu trữ dưới dạng Form Script, StartXML file, Domain file và Imgage Resource file format. PI được phát triển bởi  PID, rồi được sử dụng bởi MiFlatform Brower. Mặc dù StartXML file là một file phát triển nhưng chức năng của nó lại thuộc về file cấu hình.
+            BS: 
+                Là một service mà xử lý data input với PI, được lưu trữ dưới dạng ASP, JSP, JavaScript, C++ file. Sau khi BS được phát triển với BSB, BS file được thực thi từ data server(WAS, IIS, Tomcat, MiServer, etc.) và kết quả được sử dụng bởi MiFlatform Brower.
+        Configuration file: 
+            StartXML: 
+                Là một file xml, được lưu trữ các tham số sử dụng để hiển thị cho user qua MiFlatform Brower
+            Lauch file: Là một file html, cài đặt và thực thi MiUpdater, Khi sử dụng MS Internet Exporer, MiUpdater sẽ sử dụng Lauch File
+            MiFlatform View File: Là một file Html,để thưcj hiện MiFlatform Brower trong MS IE
+            Update Info file:
+                Là một file bao gồm basic data cho deploy Component file. MiUpdater thực hiện khởi tạo task phân tán bởi referring this file.
+            Update List file: Là một file bao gồm thông tin chi tiết cần cho Component file distribution.
+    Service deployment:
+        Service là một tập các task cần xử lý cho business logic qua user interface. MiFlatform cung cấp môi trường và tool phát triển .
+        User được cung cấp service qua MiFlatform Brower. Deveoper phải phát triển business service(BS) và PI sử dụng BSB và PID để cung cấp service tới user.
+    Business Service:
+        Là một service xử lý data.
+        Data server sẽ chạy file business logic file. Kết quả được gửi tới MiFlatform Brower dưới dạng XML.
+        LocalBS được sử dụng khi không cần kết nối trực tiếp tới server.
+        Cần cài đặt MiFlatform JSP API được cài đặt để sử dụng cho webserver.
+    PID:
+        StartXML: 
+            Là một XML file bao gồm các tham số cần thiết cho MiFlatform Brower để hiển thị. Nó gồm global variable, global dataset, global script, menu data, communication protocol, MDI data, global service data and style.
+            Được lưu trữ trên server
+        Form Script file: 
+            Là một file xml, báo gồm thiết kết data.
+            JavaScript file: Báo gồm code để xử lý sự kiện, xử lý data.
+        Image File:
+        Domain File
+            Bao gồm Domain Data được sử dụng bởi MiFlatform Brower. Sử dụng để phát triển đa ngôn ngữ.
+        Webservice:
+    RUN SERVER:
+        Step 1: Tự động cài đặt chương trình phân tán
+            Khi người dùng gọi link server, CAB file sẽ tự động được download.
+        Step 2: MiUpdater RUN
+            MiUpdater sẽ tự động chạy
+        Step 3: Nhận Update Info file
+            MiUpdater tự động tải file update info.
+        Step 4: Phân tích Update Info file
+            MiUpdater phân tích update info file để chọn một list file cần download và install.
+        Step 5: Tải update list file
+        Step 6: Phân tích list file
+        Step 7: File download
+        Step 8: Download file installation
+        Step 9: Xử lý file download.
+    WHEN:KH thích dùng
+    WHY: 
+            Link tới SOA.
+            
+    
+CONFIGURATION:
+    
+USAGE:
+    BASIC:
+    ADVANTAGE
+NOTE:
