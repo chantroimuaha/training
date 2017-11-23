@@ -65,59 +65,201 @@ USAGE:
             parameterClass: Class của tham số,
             resultMap: Để định nghĩa  riêng mapping giữa Model và table
     ADVANTAGE
-    IBATIS trong spring:
-        Có 1 file mapping: Account.xml,
-        <sqlMap namespace="Account">
-          <resultMap id="result" class="examples.Account">
-            <result property="name" column="NAME" columnIndex="1"/>
-            <result property="email" column="EMAIL" columnIndex="2"/>
-          </resultMap>
+        1,IBATIS trong spring:
+            Có 1 file mapping: Account.xml,
+            <sqlMap namespace="Account">
+              <resultMap id="result" class="examples.Account">
+                <result property="name" column="NAME" columnIndex="1"/>
+                <result property="email" column="EMAIL" columnIndex="2"/>
+              </resultMap>
 
-          <select id="getAccountByEmail" resultMap="result">
-            select ACCOUNT.NAME, ACCOUNT.EMAIL
-            from ACCOUNT
-            where ACCOUNT.EMAIL = #value#
-          </select>
-          <insert id="insertAccount">
-            insert into ACCOUNT (NAME, EMAIL) values (#name#, #email#)
-          </insert>
-        </sqlMap>
-        File cấu hình sau:
-        <sqlMapConfig>
-          <sqlMap resource="example/Account.xml"/>
-        </sqlMapConfig>
-        IBATIS lấy resource từ classpath
-        Cấu hình bean dùng cho IBATIS:
-            Sử dụng SqlMapClientFactoryBean
-            <beans>
-              <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-                <property name="driverClassName" value="${jdbc.driverClassName}"/>
-                <property name="url" value="${jdbc.url}"/>
-                <property name="username" value="${jdbc.username}"/>
-                <property name="password" value="${jdbc.password}"/>
-              </bean>
+              <select id="getAccountByEmail" resultMap="result">
+                select ACCOUNT.NAME, ACCOUNT.EMAIL
+                from ACCOUNT
+                where ACCOUNT.EMAIL = #value#
+              </select>
+              <insert id="insertAccount">
+                insert into ACCOUNT (NAME, EMAIL) values (#name#, #email#)
+              </insert>
+            </sqlMap>
+            File cấu hình sau:
+            <sqlMapConfig>
+              <sqlMap resource="example/Account.xml"/>
+            </sqlMapConfig>
+            IBATIS lấy resource từ classpath
+            Cấu hình bean dùng cho IBATIS:
+                Sử dụng SqlMapClientFactoryBean
+                <beans>
+                  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+                    <property name="driverClassName" value="${jdbc.driverClassName}"/>
+                    <property name="url" value="${jdbc.url}"/>
+                    <property name="username" value="${jdbc.username}"/>
+                    <property name="password" value="${jdbc.password}"/>
+                  </bean>
 
-              <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
-                <property name="configLocation" value="WEB-INF/sqlmap-config.xml"/>
-                <property name="dataSource" ref="dataSource"/>
-              </bean>
-            </beans>
-            Sử dụng SqlMapClientTemplate và SqlMapClientSuport:
-            public class SqlMapAccountDao extends SqlMapClientDaoSupport implements AccountDao {
+                  <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+                    <property name="configLocation" value="WEB-INF/sqlmap-config.xml"/>
+                    <property name="dataSource" ref="dataSource"/>
+                  </bean>
+                </beans>
+                Sử dụng SqlMapClientTemplate và SqlMapClientSuport:
+                public class SqlMapAccountDao extends SqlMapClientDaoSupport implements AccountDao {
 
-                public Account getAccount(String email) throws DataAccessException {
-                    return (Account) getSqlMapClientTemplate().queryForObject("getAccountByEmail", email);
+                    public Account getAccount(String email) throws DataAccessException {
+                        return (Account) getSqlMapClientTemplate().queryForObject("getAccountByEmail", email);
+                    }
+
+                    public void insertAccount(Account account) throws DataAccessException {
+                        getSqlMapClientTemplate().update("insertAccount", account);
+                    }
                 }
+                Configure:
+                <beans>
+                  <bean id="accountDao" class="example.SqlMapAccountDao">
+                    <property name="sqlMapClient" ref="sqlMapClient"/>
+                  </bean>
 
-                public void insertAccount(Account account) throws DataAccessException {
-                    getSqlMapClientTemplate().update("insertAccount", account);
-                }
-            }
-            Configure:
-            <beans>
-              <bean id="accountDao" class="example.SqlMapAccountDao">
-                <property name="sqlMapClient" ref="sqlMapClient"/>
-              </bean>
+                </beans>
+        2, Stored Procedures
+            Có thể dụng iBATIS để gọi procedure:
+            Ví dụ có procedure sau :
+                DELIMITER $$
 
-            </beans>
+                   DROP PROCEDURE IF EXISTS `testdb`.`getEmp` $$
+                   CREATE PROCEDURE `testdb`.`getEmp` 
+                   (IN empid INT)
+                    
+                   BEGIN
+                      SELECT * FROM EMPLOYEE
+                      WHERE ID = empid;
+                   END $$
+
+                DELIMITER;
+            Cáu hình file xml:
+            <!-- To call stored procedure. -->
+                <sqlMap namespace="Employee">
+                   <procedure id="getEmpInfo" resultClass="Employee" parameterMap="getEmpInfoCall">
+                      { call getEmp( #acctID# ) } 
+                   </procedure>
+                    
+                   <parameterMap id="getEmpInfoCall" class="map">
+                      <parameter property="acctID" jdbcType="INT" javaType="java.lang.Integer" mode="IN"/>
+                   </parameterMap>
+               </sqlMap>
+            Cách sử dụng:
+                Employee e = (Employee) smc.queryForObject ("Employee.getEmpInfo", id);
+        3, Dynamic SQL
+            Sử dụng khi ta muốn check điều kiện khi Query
+            Ví dụ sau:
+                VD1:
+                Nếu Id khác null thì trả về tất cả record tương ứng với ID đó
+                Nếu Id là null thì cũng trả về các record có ID là null
+                    <sqlMap namespace="Employee">
+                       <select id="findByID" resultClass="Employee">
+                          SELECT * FROM EMPLOYEE
+                            
+                          <dynamic prepend="WHERE ">
+                             <isNull property="id">
+                                id IS NULL
+                             </isNull>
+                                
+                             <isNotNull property="id">
+                                id = #id#
+                             </isNotNull>
+                          </dynamic>
+                            
+                       </select>
+                    </sqlMap>
+                VD2:
+                Nếu id khác empty thì trả về bản ghi có ID tương ứng:
+                    <select id="findByID" resultClass="Employee">
+                       SELECT * FROM EMPLOYEE
+                        
+                       <dynamic prepend="WHERE ">
+                          <isNotEmpty property="id">
+                             id = #id#
+                          </isNotEmpty>
+                       </dynamic>
+                        
+                    </select>
+                VD3:
+                Khi sử dụng nhiều điều kiện AND OR
+                    <select id="findByID" resultClass="Employee">
+                       SELECT * FROM EMPLOYEE    
+                       <dynamic prepend="WHERE ">
+                          <isNotEmpty prepend="AND" property="id">
+                             id = #id#
+                          </isNotEmpty>
+                            
+                          <isNotEmpty prepend="OR" property="first_name">
+                             first_name = #first_name#
+                          </isNotEmpty>
+                       </dynamic>
+                    </select>
+            Cách sử dụng:
+                Employee rec = new Employee();
+                  rec.setId(1);
+
+                  List <Employee> ems = (List<Employee>)  
+                     smc.queryForList("Employee.findByID", rec);
+                  Employee em = null;
+        4, iBATIS sử dụng OGNL Expression
+            If/Choose,when,otherwise,wherè,foreach.
+            4.1 If statement
+                <select id="findActiveBlogWithTitleLike" parameterType="Blog" resultType="Blog">
+                   SELECT * FROM BLOG
+                   WHERE state = 'ACTIVE.
+                    
+                   <if test="title != null">
+                      AND title like #{title}
+                   </if>
+                   <if test="author != null">
+                      AND author like #{author}
+                   </if>
+                </select>
+            4.2 Choose,when,otherwise Statement
+                <select id="findActiveBlogWithTitleLike" parameterType="Blog" resultType="Blog">
+                   SELECT * FROM BLOG
+                   WHERE state = 'ACTIVE.
+                    
+                   <choose>
+                      <when test="title != null">
+                         AND title like #{title}
+                      </when>
+                        
+                      <when test="author != null and author.name != null">
+                         AND author like #{author}
+                      </when>
+                        
+                      <otherwise>
+                         AND featured = 1
+                      </otherwise>
+                   </choose>
+                    
+                </select>
+            4.3 Where-if
+                 <where>
+                      <if test="state != null">
+                         state = #{state}
+                      </if>
+                        
+                      <if test="title != null">
+                         AND title like #{title}
+                      </if>
+                        
+                      <if test="author != null>
+                         AND author like #{author}
+                      </if>
+                   </where>
+            4.4 Foreach
+                    <select id="selectPostIn" resultType="domain.blog.Post">
+                       SELECT *
+                       FROM POST P
+                       WHERE ID in
+                        
+                       <foreach item="item" index="index" collection="list"
+                          open="(" separator="," close=")">
+                          #{item}
+                       </foreach>
+                    </select>
 NOTE:
