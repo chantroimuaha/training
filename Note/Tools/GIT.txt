@@ -6,6 +6,9 @@ CONFIGURATION:
     
 USAGE:
     BASIC:
+        Mỗi một remote branch sẽ có 1 local branch tương ứng, khi push lên thì sẽ lưu ở remote.
+        HEAD là môt branch mà trở tới 1 branch tồn tại, mặc định là master
+        
     ADVANTAGE
         Delete branch local:git branch -d {the_local_branch} (use -D instead to force deletion without checking merged status)
         Delete branch remote: git push origin --delete {the_remote_branch}

@@ -7,3 +7,5 @@ Jenkin
 Docker
 
 https://docs.spring.io/spring/docs/2.5.x/reference/index.html
+Đọc hết sách về basic web: JPA,Authentication --> serverlet document --> đọc spring document --> spring boot document
+Khi đọc tài liệu, sách, tutorial --> ghi bản đọc hiểu
