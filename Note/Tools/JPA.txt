@@ -1,2 +1,41 @@
-Persistence unit là một cấu hình và là một tập các class có cùng logic với nhau. Cấu hình sẽ được điều khiển bởi EntityManager, chỉ được điều khiển với Entity mà được định nghĩa trong persítence unit
-Có để đặt một hoặc nhiều persistence unit trong file persistence.xml
+Persistence Unit
+    Định nghĩa:
+        Persistence unit là một cấu hình và là một tập các class có cùng logic với nhau. Cấu hình sẽ được điều khiển bởi EntityManager, chỉ được điều khiển với Entity mà được định nghĩa trong persítence unit
+        Có để đặt một hoặc nhiều persistence unit trong file persistence.xml
+    Cấu hình:
+        Tạo Persistence Unit trong file /WEB-INF/classes/META-INF/persistence.xml
+Spring-JPA
+    Trước khi JPA trở lên phổ biến thì spring sử dụng jdbcTemplate, nếu có lỗi thì sẽ throw DataAccessException
+    Sau đó spring cung cấp JpaTemplate giống như jdbcTemplate để sử dụng cho persistence API trong Spring Framework. Tuy nhiên JpaTemplate deprecated trong spring 3.1 và remote tại spring 4.0, EntityManager được sử dụng.
+    Spring Transaction
+        Spring sử dụng FlatformTransactionmanager để quản lý transaction. Spring sẽ xử lý transaction một cách tự động qua annotation @Transactional
+        Spring bắt đầu một transaction khi gặp annotation
+        Mỗi một thread sẽ sử dụng một thread transaction, dẫn đến không sử dụng @Inject hoặc @Autowired, sử dụng @PersistenceContext EntityManager entityManager
+    Configuration Spring JPA
+        Tạo DataSource
+        Tạo persistence unit
+        Sử dụng @Transactional
+        Cách 1: Tạo Datasource đơn giản, không cần pool
+            @Bean
+            public DataSource springJpaDataSource() {
+                DriverManagerDataSource dataSource = new DriverManagerDataSource();
+                dataSource.setUrl("jdbc:mysql:///");
+                dataSource.setUsername("tomcat");
+                dataSource.setPassword("tomcat");
+                return datasource;
+            }
+         Cách 2: Cấu hình trên server rồi sử dung JNDI
+            @Bean
+            public DataSource springJpaDataSource() {
+                JndiDataSourceLookup lookup = new JndiDataSourceLookup();
+                return lookup.getDataSource("jdbc/SpringJpa");
+            }
+         Trong file context.xml, DataSource được cấu hình như sau:
+            <Resource name="jdbc/SpringJpa" 
+                type="javax.sql.DataSource"
+                maxActive="20" maxIdel="5" maxWait="10000"
+                username="tomcat" password="tomcat"
+                driverClassName="com.mysql.jdbc.Driver"
+                defaultTransactionIsolation="READ_COMMITTED"
+                url="jdbc:mysql://localhost"/>
+        Để sử dụng @Transactional, setting @EnableTransactionMannagement
