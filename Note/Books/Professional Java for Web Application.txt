@@ -16,3 +16,14 @@ CHAPTER 19:
 
     Data persistence:
         Từ persistence nghĩa là tạo một số hình dạng của data qua nhiều execution trong chương trình.VD như logging. Tuy nhiên persistence không đề cập tới logging. Thay vì thế, nó đề cập tới lưu Entities bên trong ứng dụng.
+    ORM dùng để lưu trữ Object-oriented entitíe trong relational database. ORM đơn giản hóa truy cập database.
+    JPA cung cấp chuẩn O/RM API
+    Hibernate Session:
+        Session là gì?
+            Session trong hibernate nhu một transaction, sẽ chữa một vài request.
+            Method get,save,persist không được sử dụng cho attached entity. Nên sử dụng merge.
+            Để detach entity dùng method evict
+        Các tạo Session:
+            Session session = SessionFactory.openSession();
+            Để update builk session nên sử dụng StatelessSesion
+594

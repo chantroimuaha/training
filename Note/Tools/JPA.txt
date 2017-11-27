@@ -1,0 +1,2 @@
+Persistence unit là một cấu hình và là một tập các class có cùng logic với nhau. Cấu hình sẽ được điều khiển bởi EntityManager, chỉ được điều khiển với Entity mà được định nghĩa trong persítence unit
+Có để đặt một hoặc nhiều persistence unit trong file persistence.xml
