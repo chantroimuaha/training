@@ -39,3 +39,15 @@ Spring-JPA
                 defaultTransactionIsolation="READ_COMMITTED"
                 url="jdbc:mysql://localhost"/>
         Để sử dụng @Transactional, setting @EnableTransactionMannagement
+    Repository:
+        Ví dụ sử dụng repository:
+            public Author get(long id) {
+                return this.entityManager.createQuery("SELECT a FROM Author a WHERE a.id = :id", Author.class).setParameter("id",id).getSingleResult();
+            }
+    Transactional
+        MANDATORY: Transaction phải tồn tại, nếu không tồn tại sẽ throw exception
+        NEVER: Transaction không được tồn tại, nếu tồn tại thì throw exception
+        NOT_SUPPORTED: Transaction không được sử dụng, nếu tồn tại thì sẽ bị suspended, sau khi thực hiện xong sẽ resume
+        REQUIRED: Transaction sẽ được sử dụng. Nếu không có transaction tồn tại, nó sẽ bắt đàu trước khi method thực hiện và hoàn thành sau khi method trả về.
+        REQUIRED_NEW: Giống REQUIRED, nếu transaction tồn tại nó sẽ suppend
+        SUPPORT: Nếu transaction tồn tại thì sẽ được sử dụng, không thì thôi
