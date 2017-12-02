@@ -27,3 +27,4 @@ CHAPTER 19:
             Session session = SessionFactory.openSession();
             Để update builk session nên sử dụng StatelessSesion
 594
+611
