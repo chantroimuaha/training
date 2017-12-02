@@ -1,0 +1,30 @@
+PART III: Persisting Data with JPA and Hibernate ORM
+    --> CHAPTER 19: Introducing Java Persistence API and Hibernate ORM
+        JPA và Hibernate là gì?
+    --> CHAPTER 20: Mapping Entities to Table with JPA Annotation
+    --> CHAPTER 21: Using JPA in Spring Framework Repository
+    --> CHAPTER 22: Eliminating Boilerplate Repositories with Spring Data JPA
+    --> CHAPTER 23: Searching for Data with JPA and Hibernate Search
+    --> CHAPTER 24: Creating Advanced Mappings and Custom Data Types
+
+CHAPTER 19:
+    --> hiểu được data persistence là gì?
+    --> ORM(Object-Relational-Mapper) là gì?
+    --> Hiểu được Hibernate ORM
+    --> Chuẩn bị một relational database
+    --> Sử dụng maven dependency
+
+    Data persistence:
+        Từ persistence nghĩa là tạo một số hình dạng của data qua nhiều execution trong chương trình.VD như logging. Tuy nhiên persistence không đề cập tới logging. Thay vì thế, nó đề cập tới lưu Entities bên trong ứng dụng.
+    ORM dùng để lưu trữ Object-oriented entitíe trong relational database. ORM đơn giản hóa truy cập database.
+    JPA cung cấp chuẩn O/RM API
+    Hibernate Session:
+        Session là gì?
+            Session trong hibernate nhu một transaction, sẽ chữa một vài request.
+            Method get,save,persist không được sử dụng cho attached entity. Nên sử dụng merge.
+            Để detach entity dùng method evict
+        Các tạo Session:
+            Session session = SessionFactory.openSession();
+            Để update builk session nên sử dụng StatelessSesion
+594
+611
