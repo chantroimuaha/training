@@ -55,7 +55,7 @@ USAGE:
 		symbol:
 			:variable
 		select:
-			
+			Sử dụng để filter, giống như hàm map
 		case/when/else
 		Simple If
 			VD:	puts "It's true" if true
