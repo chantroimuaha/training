@@ -1,0 +1,221 @@
+BASIC QUESTION:
+    WHAT: Là một ngôn ngữ hướng đối tượng
+    WHEN:
+    WHY:Lợi ích của Ruby là phát triển nhanh và dễ dàng
+CONFIGURATION:
+    
+USAGE:
+    BASIC:
+		Khai báo biến:
+			user_input = 444
+			Ruby có 3 kiểu dữ liệu là string, number, boolean. 
+			Khi khai bao biến chỉ cần gán giá trị trực tiếp cho nó.
+		Lấy dữ liệu từ console:
+			Sử dụng user_input = gets.chomp
+		Downcase/uppercase:
+			Gọi user_input.downcase!
+		If/else/elsif/end
+		Include
+			user_input.include? "s"
+		Replace
+			user_input.gsub!("s", "th")
+		Loop
+		while/until/for/loopdo/each/times
+			while x < 3
+			end
+			until i == 6
+			end
+			for num in 1...10
+			end
+			..: Include
+			...: Exclude
+			loopdo:
+				i = 20
+				loop do
+				  i -= 1
+				  print "#{i}"
+				  break if i <= 0
+				end
+			each:
+				array.each do |x|
+				  x += 10
+				  print "#{x}"
+				end
+			numbers.each { |item| puts item }
+			# another way to loop
+			numbers.each do |item|
+			  puts item
+			end
+		hash: Like HashMap
+			hash = {x => 3, y => 4}
+		Do end:
+			Có thể thay thế do - end bằng {}
+		nil:
+			Khi Hash không lấy được giá trị thì sẽ trả về nil
+		symbol:
+			:variable
+		select:
+			
+		case/when/else
+		Simple If
+			VD:	puts "It's true" if true
+			if true puts "It's true"
+		Short-circuit
+			def a
+			  puts "A was evaluated!"
+			  return true
+			end
+
+			def b
+			  puts "B was also evaluated!"
+			  return true
+			end
+
+			puts a || b
+			puts "------"
+			puts a && b
+		Upto/downto
+		Respond_to
+			[1, 2, 3].respond_to?(:push)
+		Pushy
+			alphabet = ["a", "b", "c"]
+			alphabet << "d" # Update me!
+
+			caption = "A giraffe surrounded by "
+			caption << "weezards!" # Me, too!
+		To_s:
+			Convert to String
+		Yield:
+			def block_test
+			  puts "We're in the method!"
+			  puts "Yielding to the block..."
+			  yield
+			  puts "We're back in the method!"
+			end
+
+			block_test { puts ">>> We're in the block!" }
+			
+			def yield_name(name)
+			  puts "In the method! Let's yield."
+			  yield("Kim")
+			  puts "In between the yields!"
+			  yield(name)
+			  puts "Block complete! Back in the method."
+			end
+
+			yield_name("Eric") { |n| puts "My name is #{n}." }
+
+			# Now call the method with your name!
+			yield_name("Thien") { |n| puts "My name is #{n}."}
+		Proc
+			xx = Proc.new {}
+		Lambda
+			strings = ["leonardo", "donatello", "raphael", "michaelangelo"]
+			# Write your code below this line!
+
+			symbolize = lambda {|x| x.to_sym}
+
+			# Write your code above this line!
+			symbols = strings.collect(&symbolize)
+			print symbols
+		Class
+			class MyClass
+			  my_variable = "Hello!"
+			end
+			@@: Class variable
+			$: Global variable
+			@: Instance variable
+		Inheritane
+			class ApplicationError
+			  def display_error
+				puts "Error! Error!"
+			  end
+			end
+
+			class SuperBadError < ApplicationError
+			end
+
+			err = SuperBadError.new
+			err.display_error
+		Overide:
+			class Creature
+			  def initialize(name)
+				@name = name
+			  end
+			  
+			  def fight
+				return "Punch to the chops!"
+			  end
+			end
+
+			# Add your code below!
+			class Dragon < Creature
+				def fight
+				puts "Instead of breathing fire..."
+				super
+			  end
+			end
+		Getter/Setter
+			class Person
+			  attr_reader :name
+			  attr_writer :name
+			  //for both
+			  attr_accessor :name
+			  def initialize(name)
+				@name = name
+			  end
+			end
+		Module
+			Cann't create instance, subclass
+			Save constant
+			module Circle
+
+			  PI = 3.141592653589793
+			  
+			  def Circle.area(radius)
+				PI * radius**2
+			  end
+			  
+			  def Circle.circumference(radius)
+				2 * PI * radius
+			  end
+			end
+			User other module:
+				Math::PI
+		Import module:
+			require 'module'
+			include 
+			
+			module Action
+			  def jump
+				@distance = rand(4) + 2
+				puts "I jumped forward #{@distance} feet!"
+			  end
+			end
+
+			class Rabbit
+			  include Action
+			  attr_reader :name
+			  def initialize(name)
+				@name = name
+			  end
+			end
+
+			class Cricket
+			  include Action
+			  attr_reader :name
+			  def initialize(name)
+				@name = name
+			  end
+			end
+
+			peter = Rabbit.new("Peter")
+			jiminy = Cricket.new("Jiminy")
+
+			peter.jump
+			jiminy.jump
+		Extend:
+			use to extend module
+    ADVANTAGE
+NOTE:
+
