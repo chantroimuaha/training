@@ -1,0 +1,44 @@
+/**
+DetectHtmlTag.java
+*/
+package com.demo.hackerrank.regex;
+
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/************************************
+ * Created Date: Jan 10, 2018
+ * Created By: ndthien
+ * Desc: 
+ * **********************************
+ * Modified Date: 
+ * Modified By: 
+ * Desc: 
+ ************************************/
+public class DetectHtmlTag {
+    public static Pattern pattern = Pattern.compile("<\\b(\\w*)\\b?>?");
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        Set<String> setTag = new TreeSet<String>();
+        try (Scanner sc = new Scanner(System.in)) {
+            int line = Integer.parseInt(sc.nextLine());
+            for (int i = 0; i < line; i++) {
+                String s = sc.nextLine();
+                Matcher matcher = pattern.matcher(s);
+                while (matcher.find()) {
+                    setTag.add(matcher.group(1));
+                }
+            }
+            System.out.println(String.join(";", setTag));
+        } catch (Exception ex) {
+            System.err.println(ex);
+        }
+    }
+
+}
